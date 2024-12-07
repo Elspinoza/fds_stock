@@ -14,7 +14,7 @@ class OutproductController extends Controller
     public function index(): JsonResponse
     {
 
-        $out = Outproduct::all();
+        $out = Outproduct::with('product')->get();
 
         return response()->json($out);
     }
@@ -34,9 +34,9 @@ class OutproductController extends Controller
      */
     public function show(Outproduct $outProduct): JsonResponse
     {
-        $outProducts = Outproduct::findOrFail($outProduct);
+        $outProduct -> load('product');
 
-        return response()->json($outProducts);
+        return response()->json($outProduct);
     }
 
 
