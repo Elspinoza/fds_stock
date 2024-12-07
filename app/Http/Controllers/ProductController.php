@@ -56,8 +56,8 @@ class ProductController extends Controller
         $product->update($request->validated());
 
         return response()->json([
-            'message' => 'Article mis à jour avec succes'
-        ], 204);
+            'message' => 'Article mis à jour avec succès'
+        ], 200);
 
     }
 
@@ -70,7 +70,7 @@ class ProductController extends Controller
         $product->delete();
 
         return response()->json([
-            'message' => 'L\'article à été supprimer avec succes !'
-        ],204);
+            'message' => 'L\'article à été supprimer avec succès !'
+        ],200);
     }
 }
