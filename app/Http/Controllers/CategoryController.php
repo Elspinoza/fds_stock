@@ -57,9 +57,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
-        $cat = Category::findOrFail($category);
 
-        $cat->delete();
+        $category->delete();
 
         return response()->json([
             'message' => 'La catégorie à été supprimer avec succès'],
