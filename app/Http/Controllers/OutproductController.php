@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OutProductRequest;
 use App\Models\Outproduct;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
 class OutproductController extends Controller
@@ -24,7 +25,22 @@ class OutproductController extends Controller
      */
     public function store(OutProductRequest $request): JsonResponse
     {
-        $out = Outproduct::create($request->validated());
+
+        $outproductValid = $request->validated();
+
+        $product = Product::findOrFail($outproductValid['product_id']);
+
+        if ( $product->available_quantity < $outproductValid['quantity'] ) {
+            return response()->json([
+                'message' => 'Impossible d\'effectuer cette action car la quantité restant est inferieur à la quantité demandé.',
+                'quantité disponible' => $product->available_quantity
+            ], 400);
+        }
+
+        $product -> decrement('available_quantity', $outproductValid['quantity']);
+        $product -> save();
+
+        $out = Outproduct::create($outproductValid);
 
         return response()->json($out, 201);
     }

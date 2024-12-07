@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EnterProductRequest;
 use App\Models\Enterproduct;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
 class EnterproductController extends Controller
@@ -24,8 +25,13 @@ class EnterproductController extends Controller
      */
     public function store(EnterProductRequest $request): JsonResponse
     {
-
         $enterProduct = Enterproduct::create($request->validated());
+
+        $product = Product::findOrFail($enterProduct->product_id);
+
+        $product-> save([
+            'available_quantity' => $product->available_quantity +  $enterProduct->quantity,
+        ]);
 
         return response()->json($enterProduct, 201);
     }
@@ -53,6 +59,7 @@ class EnterproductController extends Controller
             'message' => 'Mis a jour effectuer',
             'data' =>$enterproduct]);
     }
+
 
     /**
      * Remove the specified resource from storage.
