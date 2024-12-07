@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index(): JsonResponse
     {
 
-        $products = Product::with('category_id')->get();
+        $products = Product::with('category')->get();
 
         return response()->json($products);
     }
@@ -57,7 +57,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Article mis à jour avec succès'
-        ], 200);
+        ]);
 
     }
 
@@ -71,6 +71,6 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'L\'article à été supprimer avec succès !'
-        ],200);
+        ]);
     }
 }
