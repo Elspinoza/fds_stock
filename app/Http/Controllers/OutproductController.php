@@ -55,7 +55,6 @@ class OutproductController extends Controller
         return response()->json($outProduct);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
