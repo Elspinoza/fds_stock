@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outproduct;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OutproductController extends Controller
@@ -10,10 +11,11 @@ class OutproductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+
         $out = Outproduct::all();
+
         return response()->json($out);
     }
 
