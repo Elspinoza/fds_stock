@@ -53,14 +53,6 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product): JsonResponse
     {
 
-        $prod = Product::findOrFail($product);
-
-        if (!$prod) {
-            return response()->json([
-                'message' => 'L\'article n\'existe pas'
-            ],404);
-        }
-
         $product->update($request->validated());
 
         return response()->json([
