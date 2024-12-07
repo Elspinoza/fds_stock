@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OutProductRequest;
 use App\Models\Outproduct;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class OutproductController extends Controller
 {
@@ -20,50 +20,47 @@ class OutproductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OutProductRequest $request): JsonResponse
     {
-        //
+        $out = Outproduct::create($request->validated());
+
+        return response()->json($out, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Outproduct $outproduct)
+    public function show(Outproduct $outProduct): JsonResponse
     {
-        //
+        $outProducts = Outproduct::findOrFail($outProduct);
+
+        return response()->json($outProducts);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Outproduct $outproduct)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Outproduct $outproduct)
+    public function update(OutProductRequest $request, Outproduct $outProduct): JsonResponse
     {
-        //
+        $outProduct->update($request->validated());
+
+        return response()->json([
+            'message' => 'Update successfully'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Outproduct $outproduct)
+    public function destroy(Outproduct $outProduct): JsonResponse
     {
-        //
+        $outProduct->delete();
+
+        return response()->json([
+            'message' => 'Delete successfully'
+        ]);
     }
 }
