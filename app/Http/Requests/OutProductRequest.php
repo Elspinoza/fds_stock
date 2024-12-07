@@ -11,7 +11,7 @@ class OutProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class OutProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'quantity' => 'required|integer|min:1',
+            'product_id' => 'required|integer|exists:products,id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'quantity.required' => 'La quantité est obligatoire.',
+            'quantity.integer' => 'La quantité doit être un entier positif.',
+            'quantity.min' => 'La quantité doit être d\'au moins 1.',
+            'product_id.required' => 'L\'article est obligatoire.',
+            'product_id.exists' => 'L\'article sélectionné n\'existe pas.',
         ];
     }
 }
