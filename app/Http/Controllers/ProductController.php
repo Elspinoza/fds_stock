@@ -67,15 +67,7 @@ class ProductController extends Controller
     public function destroy(Product $product): JsonResponse
     {
 
-        $prod = Product::findOrFail($product);
-
-        if (!$prod) {
-            return response()->json([
-                'message' => 'L\'article n\'existe pas'
-            ],404);
-        }
-
-        $prod->delete();
+        $product->delete();
 
         return response()->json([
             'message' => 'L\'article à été supprimer avec succes !'
