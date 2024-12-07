@@ -62,6 +62,6 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => 'La catégorie à été supprimer avec succès'],
-            204);
+            200);
     }
 }
