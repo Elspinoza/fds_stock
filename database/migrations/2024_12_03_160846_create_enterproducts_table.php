@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('enterproducts', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity')->default(0);
+            $table->unsignedInteger('quantity')->default(0);
             $table->foreignIdFor(Product::class);
             $table->timestamps();
         });
