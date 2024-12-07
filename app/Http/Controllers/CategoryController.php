@@ -35,19 +35,8 @@ class CategoryController extends Controller
      */
     public function show($id): JsonResponse
     {
-        if (!$id) {
-            return response()->json([
-                'message' => 'Aucun ID fournit'
-            ], 400);
-        }
 
-        $cat = Category::find($id);
-
-        if (!$cat) {
-            return response()->json([
-                'message' => 'La catégorie n\'existe pas'
-            ], 422);
-        }
+        $cat = Category::findOrFail($id);
 
         return response()->json($cat);
     }
