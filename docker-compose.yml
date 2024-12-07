@@ -1,0 +1,23 @@
+services:
+    postgres:
+        container_name: fds_stocks_pgsql
+        image: postgres
+        environment:
+            POSTGRES_USER: username
+            POSTGRES_PASSWORD: password
+            PGDATA: /var/lib/postgresql/data
+        volumes:
+            -   postgres:/var/lib/postgres/data
+        ports:
+            - "5432:5432"
+        networks:
+            - stock_net
+        restart: unless-stopped
+
+networks:
+    stock_net:
+        driver: bridge
+
+volumes:
+    postgres:
+
