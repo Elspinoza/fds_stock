@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->integer('available_quantity')->default(0);
+            $table->unsignedInteger('available_quantity')->default(0);
             $table->string('description')->nullable();
             $table->foreignIdFor(Category::class);
             $table->timestamps();
