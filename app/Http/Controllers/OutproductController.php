@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OutProductRequest;
 use App\Models\Outproduct;
 use App\Models\Product;
-use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class OutproductController extends Controller
@@ -27,10 +27,13 @@ class OutproductController extends Controller
     public function store(OutProductRequest $request): JsonResponse
     {
 
+        // Récupérer le produit
+        $product = Product::findOrFail($request->product_id);
+
+        // Valider les données du produit sortant
         $outproductValid = $request->validated();
 
-        $product = Product::findOrFail($outproductValid['product_id']);
-
+        // Vérifier si la quantité demandée est disponible
         if ( $product->available_quantity < $outproductValid['quantity'] ) {
             return response()->json([
                 'message' => 'Impossible d\'effectuer cette action car la quantité restant est inferieur à la quantité demandé.',
@@ -38,7 +41,9 @@ class OutproductController extends Controller
             ], 400);
         }
 
+//        $product -> decrement('available_quantity', $outproductValid->quantity);
         $product -> decrement('available_quantity', $outproductValid['quantity']);
+//        $product->available_quantity -= $outproductValid->quantity;
         $product -> save();
 
         $out = Outproduct::create($outproductValid);
@@ -81,7 +86,7 @@ class OutproductController extends Controller
     }
 
 
-    public function statistique(OutProductRequest $request): JsonResponse
+    public function statistique(Request $request)
     {
         $total_quantity = Outproduct::sum('quantity');
 
@@ -109,7 +114,7 @@ class OutproductController extends Controller
         ]);
     }
 
-    public function statistiquePeriodique(Request $request): array
+    public function statistiquePeriodique(Request $request): JsonResponse
     {
 
         $startDate = $request->query('start_date');

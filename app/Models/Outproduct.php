@@ -16,7 +16,7 @@ class Outproduct extends Model
     /** @use HasFactory<\Database\Factories\OutproductFactory> */
     use HasFactory;
 
-    protected $table = 'outproduct';
+//    protected $table = 'outproduct';
 
     protected $fillable = [
         'quantity',
