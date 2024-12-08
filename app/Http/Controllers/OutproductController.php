@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OutProductRequest;
 use App\Models\Outproduct;
 use App\Models\Product;
+use http\Env\Request;
 use Illuminate\Http\JsonResponse;
 
 class OutproductController extends Controller
@@ -76,6 +77,73 @@ class OutproductController extends Controller
 
         return response()->json([
             'message' => 'Delete successfully'
+        ]);
+    }
+
+
+    public function statistique(OutProductRequest $request): JsonResponse
+    {
+        $total_quantity = Outproduct::sum('quantity');
+
+        $products = Outproduct::with('product')
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->groupBy('product_id')
+            ->orderBy('total_quantity', 'desc')
+            ->get()
+            ->map(function ($outproduct) {
+                return [
+                    'product_id' => $outproduct->product_id,
+                    'product_name' => $outproduct->product->name ?? 'N/A',
+                    'total_quantity' => $outproduct->total_quantity,
+                ];
+            });
+
+        $most_out = $products->first();
+
+        return response()->json([
+            'total_quantity_out' => $total_quantity,
+
+            'products' => $products,
+
+            'most_out' => $most_out
+        ]);
+    }
+
+    public function statistiquePeriodique(Request $request): array
+    {
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = Outproduct::with('product');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $total_quantity = $query->sum('quantity');
+
+        $products = $query
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->groupBy('product_id')
+            ->orderBy('total_quantity', 'desc')
+            ->get()
+            ->map(function ($outproduct) {
+                return [
+                    'product_id' => $outproduct->product_id,
+                    'product_name' => $outproduct->product->name ?? 'N/A',
+                    'total_quantity' => $outproduct->total_quantity,
+                ];
+            });
+
+        $most_out = $products->first();
+
+        return response()->json([
+            'total_quantity_out' => $total_quantity,
+
+            'products' => $products,
+
+            'most_out' => $most_out
         ]);
     }
 }

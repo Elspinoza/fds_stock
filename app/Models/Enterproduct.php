@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static create(mixed $validated)
+ * @method static sum(string $string)
  */
 class Enterproduct extends Model
 {

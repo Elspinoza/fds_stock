@@ -6,6 +6,7 @@ use App\Http\Requests\EnterProductRequest;
 use App\Models\Enterproduct;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class EnterproductController extends Controller
 {
@@ -70,6 +71,79 @@ class EnterproductController extends Controller
 
         return response()->json([
             'message' => 'Deleted successfully'
+        ]);
+    }
+
+
+    public function statistique(): JsonResponse
+    {
+        // Quantité totale des articles rentrés dans la BDD
+
+        $total_quantity = Enterproduct::sum('quantity');
+
+        // Quantité totale par articles dans la BDD
+        $products = Enterproduct::with('product')
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->groupBy('product_id')
+            ->orderBy('total_quantity', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'total_quantity' => $item->total_quantity,
+                ];
+            });
+
+        // Article le plus entrer en stock
+
+        $most_enter = $products->first();
+
+        return response()->json([
+            'total_quantity' => $total_quantity,
+            'products' => $products,
+            'most_enter' => $most_enter
+        ]);
+
+    }
+
+
+    public function statistiquePeriodique(Request $request): JsonResponse
+    {
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = Enterproduct::with('product');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $total_quantity = $query->sum('quantity');
+
+        $enterProducts = $query
+            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+            ->groupBy('product_id')
+            ->orderBy('total_quantity', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->name,
+                    'total_quantity' => $item->total_quantity,
+                ];
+            });
+
+        $most_enter = $enterProducts->first();
+
+        return response()->json([
+
+            'total_quantity' => $total_quantity,
+
+            'products' => $enterProducts,
+
+            'most_enter' => $most_enter
         ]);
     }
 }
