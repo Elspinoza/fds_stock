@@ -24,7 +24,7 @@ class ProductRequest extends FormRequest
         return [
             'name' => 'required|string|unique:products|max:255',
             'description' => 'sometimes|string|max:255',
-            'available_quantity' => 'required|integer|min:1|positive',
+            'available_quantity' => 'required|integer|min:1',
             'category_id' => 'required|integer|exists:categories,id',
         ];
     }
@@ -40,7 +40,7 @@ class ProductRequest extends FormRequest
             'available_quantity.required' => 'La quantité de l\'article est obligatoire',
             'available_quantity.integer' => 'La quantité de l\'article doit obligatoirement être un chiffre',
             'available_quantity.min' => 'La quantité minimum d\'une article à enregistrer est 1',
-            'available_quantity.positive' => 'La quantité doit obligatoirement être positif',
+            //'available_quantity.positive' => 'La quantité doit obligatoirement être positif',
             'category_id.required' => 'L\'ID de la catégorie est obligatoire',
             'category_id.integer' => 'L\'ID de la catégorie doit être un chiffre',
         ];

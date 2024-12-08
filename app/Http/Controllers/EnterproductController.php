@@ -26,13 +26,14 @@ class EnterproductController extends Controller
      */
     public function store(EnterProductRequest $request): JsonResponse
     {
+
+        $product = Product::findOrFail($request->product_id);
+
+        $product->available_quantity += $request->quantity;
+
+        $product-> save();
+
         $enterProduct = Enterproduct::create($request->validated());
-
-        $product = Product::findOrFail($enterProduct->product_id);
-
-        $product-> save([
-            'available_quantity' => $product->available_quantity +  $enterProduct->quantity,
-        ]);
 
         return response()->json($enterProduct, 201);
     }

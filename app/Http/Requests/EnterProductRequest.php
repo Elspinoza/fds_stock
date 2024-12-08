@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed $product_id
+ * @property mixed $quantity
+ */
 class EnterProductRequest extends FormRequest
 {
     /**
