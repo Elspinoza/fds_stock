@@ -1,0 +1,23 @@
+
+  POST            api/v1/auth/login ....................................................................................................................................................... auth\AuthController@login
+  POST            api/v1/auth/logout ..................................................................................................................................................... auth\AuthController@logout
+  POST            api/v1/auth/register ................................................................................................................................................. auth\AuthController@register
+  GET|HEAD        api/v1/categories ..................................................................................................................................... categories.index › CategoryController@index
+  POST            api/v1/categories ..................................................................................................................................... categories.store › CategoryController@store
+  GET|HEAD        api/v1/categories/{category} ............................................................................................................................ categories.show › CategoryController@show
+  PUT|PATCH       api/v1/categories/{category} ........................................................................................................................ categories.update › CategoryController@update
+  DELETE          api/v1/categories/{category} ...................................................................................................................... categories.destroy › CategoryController@destroy
+  POST            api/v1/entrer/products/stock ......................................................................................................................................... EnterproductController@store
+  GET|HEAD        api/v1/entrer/stock/statistique ................................................................................................................................ EnterproductController@statistique
+  GET|HEAD        api/v1/entrer/stock/statistique/period ............................................................................................................... EnterproductController@statistiquePeriodique
+  GET|HEAD        api/v1/products .......................................................................................................................................... products.index › ProductController@index
+  POST            api/v1/products .......................................................................................................................................... products.store › ProductController@store
+  GET|HEAD        api/v1/products/{product} .................................................................................................................................. products.show › ProductController@show
+  PUT|PATCH       api/v1/products/{product} .............................................................................................................................. products.update › ProductController@update
+  DELETE          api/v1/products/{product} ............................................................................................................................ products.destroy › ProductController@destroy
+  POST            api/v1/sorties/products/stock .......................................................................................................................................... OutproductController@store
+  GET|HEAD        api/v1/sorties/stock/statistique ................................................................................................................................. OutproductController@statistique
+  GET|HEAD        api/v1/sorties/stock/statistique/period ................................................................................................................ OutproductController@statistiquePeriodique
+
+                                                                                                                                                                                                  Showing [19] routes
+
