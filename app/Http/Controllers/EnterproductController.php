@@ -7,9 +7,12 @@ use App\Models\Enterproduct;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EnterproductController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
@@ -24,16 +27,17 @@ class EnterproductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(EnterProductRequest $request): JsonResponse
+    public function store(Request $request ,EnterProductRequest $request1): JsonResponse
     {
 
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::findOrFail($request1->product_id);
 
-        $product->available_quantity += $request->quantity;
+        $product->available_quantity += $request1->quantity;
 
         $product-> save();
 
-        $enterProduct = Enterproduct::create($request->validated());
+//        $enterProduct = Enterproduct::create($request->validated());
+        $enterProduct = $request->user()->enterproducts()->create($request1->validated());
 
         return response()->json($enterProduct, 201);
     }
@@ -55,6 +59,8 @@ class EnterproductController extends Controller
     public function update(EnterProductRequest $request, Enterproduct $enterproduct): JsonResponse
     {
 
+        Gate::authorize('modify', $enterproduct);
+
         $enterproduct->update($request->validated());
 
         return response()->json([
@@ -68,6 +74,9 @@ class EnterproductController extends Controller
      */
     public function destroy(Enterproduct $enterproduct): JsonResponse
     {
+
+        Gate::authorize('modify', $enterproduct);
+
         $enterproduct->delete();
 
         return response()->json([

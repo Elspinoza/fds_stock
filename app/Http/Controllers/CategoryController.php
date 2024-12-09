@@ -5,9 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
+
+//    public static function middleware(): array
+//    {
+//        return [
+//            new Middleware('auth:sanctum', except: ['
+//                index,
+//                show
+//            ']),
+//        ];
+//    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -21,10 +36,12 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryRequest $request): JsonResponse
+    public function store(Request $request ,CategoryRequest $request1): JsonResponse
     {
 
-        $category = Category::create($request->validated());
+        $validated = $request1->validated();
+
+        $category = $request->user()->categories()->create($validated);
 
         return response()->json($category,201);
 
@@ -44,10 +61,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryRequest $request, Category $category): JsonResponse
+    public function update(CategoryRequest $request1, Category $category): JsonResponse
     {
 
-        $category->update($request->validated());
+        Gate::authorize('modify', $category);
+
+        $validated = $request1->validated();
+
+        $category->update($validated);
 
         return response()->json($category);
     }
@@ -57,6 +78,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): JsonResponse
     {
+
+        Gate::authorize('modify', $category);
 
         $category->delete();
 

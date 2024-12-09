@@ -5,9 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
+
+//    public static function middleware(): array
+//    {
+//        return [
+//            new Middleware('auth:sanctum', except: ['
+//                index,
+//                show
+//            ']),
+//        ];
+//    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -22,10 +37,12 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductRequest $request): JsonResponse
+    public function store(Request $request ,ProductRequest $request1): JsonResponse
     {
 
-        $product = Product::create($request->validated());
+        $validated = $request1->validated();
+
+        $product = $request->user()->products()->create($validated);
 
         return response()->json($product, 201);
     }
@@ -53,6 +70,8 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product): JsonResponse
     {
 
+        Gate::authorize('modify', $product);
+
         $product->update($request->validated());
 
         return response()->json([
@@ -66,6 +85,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): JsonResponse
     {
+
+        Gate::authorize('modify', $product);
 
         $product->delete();
 

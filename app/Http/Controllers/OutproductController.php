@@ -24,14 +24,14 @@ class OutproductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OutProductRequest $request): JsonResponse
+    public function store(Request $request ,OutProductRequest $request1): JsonResponse
     {
 
         // Récupérer le produit
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::findOrFail($request1->product_id);
 
         // Valider les données du produit sortant
-        $outproductValid = $request->validated();
+        $outproductValid = $request1->validated();
 
         // Vérifier si la quantité demandée est disponible
         if ( $product->available_quantity < $outproductValid['quantity'] ) {
@@ -41,12 +41,12 @@ class OutproductController extends Controller
             ], 400);
         }
 
-//        $product -> decrement('available_quantity', $outproductValid->quantity);
         $product -> decrement('available_quantity', $outproductValid['quantity']);
-//        $product->available_quantity -= $outproductValid->quantity;
+
         $product -> save();
 
-        $out = Outproduct::create($outproductValid);
+//        $out = Outproduct::create($outproductValid);
+        $out = $request->user()->outproducts()->create($request1->validated());
 
         return response()->json($out, 201);
     }
