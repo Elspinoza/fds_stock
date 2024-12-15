@@ -67,12 +67,17 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductRequest $request, Product $product): JsonResponse
+    public function update(Request $request, Product $product): JsonResponse
     {
 
         Gate::authorize('modify', $product);
 
-        $product->update($request->validated());
+        $product->update($request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'sometimes|string|max:255',
+            'available_quantity' => 'required|integer|min:1',
+            'category_id' => 'required|integer|exists:categories,id',
+        ]));
 
         return response()->json([
             'message' => 'Article mis à jour avec succès'

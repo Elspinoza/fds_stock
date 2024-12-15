@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Enterproduct extends Model
 {
-    /** @use HasFactory<EnterproductFactory> */
-    use HasFactory;
 
     protected $fillable = [
         'quantity',

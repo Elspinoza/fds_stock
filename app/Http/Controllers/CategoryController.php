@@ -61,12 +61,15 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryRequest $request1, Category $category): JsonResponse
+    public function update(Request $request, Category $category): JsonResponse
     {
 
         Gate::authorize('modify', $category);
 
-        $validated = $request1->validated();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+        ]);
 
         $category->update($validated);
 

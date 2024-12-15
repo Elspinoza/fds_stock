@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Outproduct extends Model
 {
-    /** @use HasFactory<\Database\Factories\OutproductFactory> */
-    use HasFactory;
 
 //    protected $table = 'outproduct';
 
