@@ -27,12 +27,14 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('entrer')->group(function () {
         Route::post('products/stock', [EnterproductController::class, 'store'])->middleware('auth:sanctum');
+        Route::get('stocks', [EnterproductController::class, 'index'])->middleware('auth:sanctum');
         Route::get('stock/statistique', [EnterproductController::class, 'statistique'])->middleware('auth:sanctum');
         Route::get('stock/statistique/period', [EnterproductController::class, 'statistiquePeriodique'])->middleware('auth:sanctum');
     })->middleware('auth:sanctum');
 
     Route::prefix('sorties')->group(function () {
         Route::post('products/stock', [OutproductController::class, 'store'])->middleware('auth:sanctum');
+        Route::get('stocks', [OutproductController::class, 'index'])->middleware('auth:sanctum');
         Route::get('stock/statistique', [OutproductController::class, 'statistique'])->middleware('auth:sanctum');
         Route::get('stock/statistique/period', [OutproductController::class, 'statistiquePeriodique'])->middleware('auth:sanctum');
     })->middleware('auth:sanctum');
